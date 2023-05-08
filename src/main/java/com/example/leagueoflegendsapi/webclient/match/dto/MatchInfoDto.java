@@ -1,11 +1,9 @@
-package com.example.leagueoflegendsapi.model;
+package com.example.leagueoflegendsapi.webclient.match.dto;
 
-import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-@Builder
-public class Match {
+public class MatchInfoDto {
     private long gameCreation;
     private long gameDuration;
     private String gameMode;
