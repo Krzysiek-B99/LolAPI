@@ -12,10 +12,13 @@ import org.springframework.web.client.RestTemplate;
 @Component
 public class ParticipantClient {
     private static final String MATCH_URL = "https://europe.api.riotgames.com/lol/match/v5/matches/";
-    private static final String API_KEY = System.getenv("RIOT_API_KEY");
+    private final CustomWebClient webClient;
 
+    public ParticipantClient(CustomWebClient webClient) {
+        this.webClient = webClient;
+    }
     public MatchParticipantDetails getParticipantDetailsByName(String name, String id) {
-        ParticipantDto participantDto = CustomWebClient.callGetMethod(MATCH_URL+"{id}?api_key={apiKey}", ParticipantDto.class, id, API_KEY);
+        ParticipantDto participantDto = webClient.callGetMethod(MATCH_URL+"{id}", ParticipantDto.class, id);
         ParticipantDetailsDto participantDetailsDtoByName = participantDto.getInfo().getParticipants()
                 .stream().filter(participantDetailsDto -> participantDetailsDto.getSummonerName().equals(name)).findAny().orElse(null);
         return MatchParticipantDetails.builder()

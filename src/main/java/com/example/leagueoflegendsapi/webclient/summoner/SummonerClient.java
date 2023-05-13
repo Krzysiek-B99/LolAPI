@@ -10,10 +10,14 @@ import org.springframework.web.client.RestTemplate;
 public class SummonerClient {
 
     private static final String SUMMONER_URL = "https://eun1.api.riotgames.com/lol/summoner/v4/summoners/by-name/";
-    private static final String API_KEY = System.getenv("RIOT_API_KEY");
 
+    private final CustomWebClient webClient;
+
+    public SummonerClient(CustomWebClient webClient) {
+        this.webClient = webClient;
+    }
     public Summoner getSummonerByName(String name) {
-        SummonerDto summonerDto = CustomWebClient.callGetMethod(SUMMONER_URL+"{name}?api_key={apiKey}", SummonerDto.class, name, API_KEY);
+        SummonerDto summonerDto = webClient.callGetMethod(SUMMONER_URL+"{name}", SummonerDto.class, name);
         return Summoner.builder()
                 .name(summonerDto.getName())
                 .puuid(summonerDto.getPuuid())
