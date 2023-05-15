@@ -8,6 +8,7 @@ import lombok.Getter;
 public class MatchParticipantDto {
     private String championName;
     private String summonerName;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private int teamId;
 
 }
