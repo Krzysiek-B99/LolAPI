@@ -7,7 +7,6 @@ import com.example.leagueoflegendsapi.webclient.match.dto.MatchDto;
 import com.example.leagueoflegendsapi.webclient.match.dto.MatchParticipantDto;
 import com.example.leagueoflegendsapi.webclient.match.dto.TeamDto;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Map;
@@ -22,17 +21,27 @@ public class MatchClient {
         this.webClient = webClient;
     }
     public Match getMatchById(String id) {
-        MatchDto matchDto = webClient.callGetMethod(MATCH_URL+"{id}", MatchDto.class, id);
+        MatchDto matchDto = webClient.callGetMethod(MATCH_URL + "{id}", MatchDto.class, id);
 
-        Map<Integer, List<MatchParticipantDto>> participantsByTeam = matchDto.getInfo().getParticipants()
-                .stream()
+        Map<Integer, List<MatchParticipantDto>> participantsByTeam = getParticipantsByTeamId(matchDto.getInfo().getParticipants());
+
+        List<Team> teams = buildTeams(matchDto.getInfo().getTeams(), participantsByTeam);
+
+        return buildMatch(matchDto, teams);
+    }
+
+    public Map<Integer, List<MatchParticipantDto>> getParticipantsByTeamId(List<MatchParticipantDto> participants) {
+        return participants.stream()
                 .collect(Collectors.groupingBy(MatchParticipantDto::getTeamId));
+    }
 
-        List<Team> teams = matchDto.getInfo().getTeams()
-                .stream()
+     public List<Team> buildTeams(List<TeamDto> teamDtos, Map<Integer, List<MatchParticipantDto>> participantsByTeam) {
+        return teamDtos.stream()
                 .map(teamDto -> new Team(teamDto.isWin(), teamDto.getTeamId(), participantsByTeam.get(teamDto.getTeamId())))
                 .toList();
+    }
 
+    private Match buildMatch(MatchDto matchDto, List<Team> teams) {
         return Match.builder()
                 .gameCreation(matchDto.getInfo().getGameCreation())
                 .gameDuration(matchDto.getInfo().getGameDuration())
