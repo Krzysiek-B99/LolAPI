@@ -6,4 +6,5 @@ import lombok.Getter;
 public class MatchParticipantDto {
     private String championName;
     private String summonerName;
+
 }

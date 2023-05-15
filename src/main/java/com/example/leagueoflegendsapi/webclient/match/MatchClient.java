@@ -3,8 +3,11 @@ package com.example.leagueoflegendsapi.webclient.match;
 import com.example.leagueoflegendsapi.model.Match;
 import com.example.leagueoflegendsapi.webclient.CustomWebClient;
 import com.example.leagueoflegendsapi.webclient.match.dto.MatchDto;
+import com.example.leagueoflegendsapi.webclient.match.dto.MatchParticipantDto;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.stream.Collectors;
 
 @Component
 public class MatchClient {

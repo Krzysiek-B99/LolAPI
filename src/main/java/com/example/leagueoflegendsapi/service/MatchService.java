@@ -8,14 +8,15 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class MatchService {
     private final MatchClient matchClient;
-    public Match getMatch() {
-        return matchClient.getMatchById("EUN1_3367424860");
+    public Match getMatchDetails(String id) {
+        return matchClient.getMatchById(id);
     }
-
 
 }

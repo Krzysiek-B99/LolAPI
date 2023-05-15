@@ -5,7 +5,10 @@ import com.example.leagueoflegendsapi.model.Summoner;
 import com.example.leagueoflegendsapi.service.MatchService;
 import com.example.leagueoflegendsapi.service.SummonerService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 public class MatchController {
@@ -15,8 +18,9 @@ public class MatchController {
         this.matchService = matchService;
     }
 
-    @GetMapping("/match")
-    public Match getMatch(){
-        return matchService.getMatch();
+    @GetMapping("/match/{id}")
+    public Match getMatch(@PathVariable String id){
+        return matchService.getMatchDetails(id);
     }
+
 }
