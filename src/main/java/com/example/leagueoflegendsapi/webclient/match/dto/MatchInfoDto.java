@@ -10,4 +10,5 @@ public class MatchInfoDto {
     private long gameDuration;
     private String gameMode;
     private List<MatchParticipantDto> participants;
+    private List<TeamDto> teams;
 }

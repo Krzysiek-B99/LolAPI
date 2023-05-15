@@ -1,6 +1,7 @@
 package com.example.leagueoflegendsapi.model;
 
 import com.example.leagueoflegendsapi.webclient.match.dto.MatchParticipantDto;
+import com.example.leagueoflegendsapi.webclient.match.dto.TeamDto;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -12,5 +13,5 @@ public class Match {
     private long gameCreation;
     private long gameDuration;
     private String gameMode;
-    private List<MatchParticipantDto> participants;
+    private List<Team> teams;
 }
