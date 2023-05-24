@@ -15,5 +15,14 @@ public class ParticipantDetails {
     private int teamId;
     private Integer baitPings; //Integer because can be null (@JsonInclude) int by default is 0 not null
     private Integer timeBeingDead;
+    private Integer longestTimeSpentLiving;
+    private Integer spell1Casts;
+    private Integer spell2Casts;
+    private Integer spell3Casts;
+    private Integer spell4Casts;
+    private String summonerSpell1Name;
+    private Integer summonerSpell1Casts;
+    private String summonerSpell2Name;
+    private Integer summonerSpell2Casts;
 
 }

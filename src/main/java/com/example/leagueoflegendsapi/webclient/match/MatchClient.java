@@ -3,6 +3,7 @@ package com.example.leagueoflegendsapi.webclient.match;
 import com.example.leagueoflegendsapi.model.Match;
 import com.example.leagueoflegendsapi.model.ParticipantDetails;
 import com.example.leagueoflegendsapi.model.Team;
+import com.example.leagueoflegendsapi.util.SummonerSpellidToName;
 import com.example.leagueoflegendsapi.webclient.CustomWebClient;
 import com.example.leagueoflegendsapi.webclient.match.dto.MatchDto;
 import com.example.leagueoflegendsapi.webclient.match.dto.MatchParticipantDto;
@@ -37,15 +38,25 @@ public class MatchClient {
                 .collect(Collectors.groupingBy(ParticipantDetails::getTeamId));
     }
 
-    private ParticipantDetails buildParticipantDetails(MatchParticipantDto participant, boolean includeExtraFields) {
+    private ParticipantDetails buildParticipantDetails(MatchParticipantDto participant, boolean includeExtraDetailsFields) {
         ParticipantDetails.ParticipantDetailsBuilder builder = ParticipantDetails.builder()
                 .summonerName(participant.getSummonerName())
                 .championName(participant.getChampionName())
                 .teamId(participant.getTeamId());
 
-        if (includeExtraFields) {
+        if (includeExtraDetailsFields) {
             builder.baitPings(participant.getBaitPings())
-                    .timeBeingDead(participant.getTotalTimeSpentDead());
+                    .timeBeingDead(participant.getTotalTimeSpentDead())
+                    .longestTimeSpentLiving(participant.getLongestTimeSpentLiving())
+                    .spell1Casts(participant.getSpell1Casts())
+                    .spell2Casts(participant.getSpell2Casts())
+                    .spell3Casts(participant.getSpell3Casts())
+                    .spell4Casts(participant.getSpell4Casts())
+                    .summonerSpell1Name(SummonerSpellidToName.changeSpellIdToName(participant.getSummoner1Id()))
+                    .summonerSpell1Casts(participant.getSummoner1Casts())
+                    .summonerSpell2Name(SummonerSpellidToName.changeSpellIdToName(participant.getSummoner2Id()))
+                    .summonerSpell2Casts(participant.getSummoner2Casts())
+                    ;
         }
 
         return builder.build();

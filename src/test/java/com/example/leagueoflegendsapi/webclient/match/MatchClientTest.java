@@ -44,7 +44,7 @@ public class MatchClientTest {
                 new MatchParticipantDto("Player4", 200)
         );
 
-        Map<Integer, List<ParticipantDetails>> result = matchClient.getParticipantsByTeamId(participants);
+        Map<Integer, List<ParticipantDetails>> result = matchClient.getParticipantsByTeamId(participants,false);
 
         Assertions.assertEquals(2, result.size());
         Assertions.assertEquals(2, result.get(100).size());
