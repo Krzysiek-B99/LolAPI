@@ -1,6 +1,7 @@
 package com.example.leagueoflegendsapi.webclient.match;
 
 import com.example.leagueoflegendsapi.model.Match;
+import com.example.leagueoflegendsapi.model.ParticipantDetails;
 import com.example.leagueoflegendsapi.model.Team;
 import com.example.leagueoflegendsapi.webclient.CustomWebClient;
 import com.example.leagueoflegendsapi.webclient.match.dto.MatchDto;
@@ -23,23 +24,33 @@ public class MatchClient {
     public Match getMatchById(String id) {
         MatchDto matchDto = webClient.callGetMethod(MATCH_URL + "{id}", MatchDto.class, id);
 
-        Map<Integer, List<MatchParticipantDto>> participantsByTeam = getParticipantsByTeamId(matchDto.getInfo().getParticipants());
+        Map<Integer, List<ParticipantDetails>> participantsByTeam = getParticipantsByTeamId(matchDto.getInfo().getParticipants());
 
         List<Team> teams = buildTeams(matchDto.getInfo().getTeams(), participantsByTeam);
 
         return buildMatch(matchDto, teams);
     }
 
-    public Map<Integer, List<MatchParticipantDto>> getParticipantsByTeamId(List<MatchParticipantDto> participants) {
+    public Map<Integer, List<ParticipantDetails>> getParticipantsByTeamId(List<MatchParticipantDto> participants) {
         return participants.stream()
-                .collect(Collectors.groupingBy(MatchParticipantDto::getTeamId));
+                .map(participant -> ParticipantDetails.builder()
+                        .summonerName(participant.getSummonerName())
+                        .championName(participant.getChampionName())
+                        .teamId(participant.getTeamId())
+                        .build()
+                )
+                .collect(Collectors.groupingBy(ParticipantDetails::getTeamId));
     }
-
-     public List<Team> buildTeams(List<TeamDto> teamDtos, Map<Integer, List<MatchParticipantDto>> participantsByTeam) {
-        return teamDtos.stream()
-                .map(teamDto -> new Team(teamDto.isWin(), teamDto.getTeamId(), participantsByTeam.get(teamDto.getTeamId())))
-                .toList();
-    }
+public List<Team> buildTeams(List<TeamDto> teamDtos, Map<Integer, List<ParticipantDetails>> participantsByTeam) {
+    return teamDtos.stream()
+            .map(teamDto -> Team.builder()
+                    .win(teamDto.isWin())
+                    .teamId(teamDto.getTeamId())
+                    .participants(participantsByTeam.get(teamDto.getTeamId()))
+                    .build()
+            )
+            .toList();
+}
 
     private Match buildMatch(MatchDto matchDto, List<Team> teams) {
         return Match.builder()
