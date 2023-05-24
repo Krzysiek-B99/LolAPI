@@ -43,6 +43,7 @@ public class MatchClient {
 
     private Match buildMatch(MatchDto matchDto, List<Team> teams) {
         return Match.builder()
+                .matchId(matchDto.getMetadata().getMatchId())
                 .gameCreation(matchDto.getInfo().getGameCreation())
                 .gameDuration(matchDto.getInfo().getGameDuration())
                 .gameMode(matchDto.getInfo().getGameMode())

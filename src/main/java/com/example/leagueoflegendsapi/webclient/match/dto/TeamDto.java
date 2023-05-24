@@ -1,5 +1,6 @@
 package com.example.leagueoflegendsapi.webclient.match.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,5 +14,6 @@ import java.util.List;
 @AllArgsConstructor
 public class TeamDto {
     private boolean win;
+
     private int teamId;
 }

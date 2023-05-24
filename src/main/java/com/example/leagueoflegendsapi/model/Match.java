@@ -10,6 +10,7 @@ import java.util.List;
 @Getter
 @Builder
 public class Match {
+    private String matchId;
     private long gameCreation;
     private long gameDuration;
     private String gameMode;
