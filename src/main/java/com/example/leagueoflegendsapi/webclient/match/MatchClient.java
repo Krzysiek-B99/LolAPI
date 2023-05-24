@@ -21,36 +21,45 @@ public class MatchClient {
     public MatchClient(CustomWebClient webClient) {
         this.webClient = webClient;
     }
-    public Match getMatchById(String id) {
+    public Match getMatchById(String id,boolean includeExtraDetailsFields) {
         MatchDto matchDto = webClient.callGetMethod(MATCH_URL + "{id}", MatchDto.class, id);
 
-        Map<Integer, List<ParticipantDetails>> participantsByTeam = getParticipantsByTeamId(matchDto.getInfo().getParticipants());
+        Map<Integer, List<ParticipantDetails>> participantsByTeam = getParticipantsByTeamId(matchDto.getInfo().getParticipants(),includeExtraDetailsFields);
 
         List<Team> teams = buildTeams(matchDto.getInfo().getTeams(), participantsByTeam);
 
         return buildMatch(matchDto, teams);
     }
 
-    public Map<Integer, List<ParticipantDetails>> getParticipantsByTeamId(List<MatchParticipantDto> participants) {
+    public Map<Integer, List<ParticipantDetails>> getParticipantsByTeamId(List<MatchParticipantDto> participants, boolean includeExtraDetailsFields) {
         return participants.stream()
-                .map(participant -> ParticipantDetails.builder()
-                        .summonerName(participant.getSummonerName())
-                        .championName(participant.getChampionName())
-                        .teamId(participant.getTeamId())
-                        .build()
-                )
+                .map(participant -> buildParticipantDetails(participant, includeExtraDetailsFields))
                 .collect(Collectors.groupingBy(ParticipantDetails::getTeamId));
     }
-public List<Team> buildTeams(List<TeamDto> teamDtos, Map<Integer, List<ParticipantDetails>> participantsByTeam) {
-    return teamDtos.stream()
-            .map(teamDto -> Team.builder()
-                    .win(teamDto.isWin())
-                    .teamId(teamDto.getTeamId())
-                    .participants(participantsByTeam.get(teamDto.getTeamId()))
-                    .build()
-            )
-            .toList();
-}
+
+    private ParticipantDetails buildParticipantDetails(MatchParticipantDto participant, boolean includeExtraFields) {
+        ParticipantDetails.ParticipantDetailsBuilder builder = ParticipantDetails.builder()
+                .summonerName(participant.getSummonerName())
+                .championName(participant.getChampionName())
+                .teamId(participant.getTeamId());
+
+        if (includeExtraFields) {
+            builder.baitPings(participant.getBaitPings())
+                    .timeBeingDead(participant.getTotalTimeSpentDead());
+        }
+
+        return builder.build();
+    }
+    public List<Team> buildTeams(List<TeamDto> teamDtos, Map<Integer, List<ParticipantDetails>> participantsByTeam) {
+        return teamDtos.stream()
+                .map(teamDto -> Team.builder()
+                        .win(teamDto.isWin())
+                        .teamId(teamDto.getTeamId())
+                        .participants(participantsByTeam.get(teamDto.getTeamId()))
+                        .build()
+                )
+                .toList();
+    }
 
     private Match buildMatch(MatchDto matchDto, List<Team> teams) {
         return Match.builder()

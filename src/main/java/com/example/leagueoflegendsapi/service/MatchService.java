@@ -15,8 +15,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MatchService {
     private final MatchClient matchClient;
-    public Match getMatchDetails(String id) {
-        return matchClient.getMatchById(id);
+    public Match getMatchDetails(String id,boolean includeExtraDetailsFields) {
+        return matchClient.getMatchById(id,includeExtraDetailsFields);
     }
 
 }

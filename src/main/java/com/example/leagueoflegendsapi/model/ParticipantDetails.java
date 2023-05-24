@@ -14,5 +14,6 @@ public class ParticipantDetails {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private int teamId;
     private Integer baitPings; //Integer because can be null (@JsonInclude) int by default is 0 not null
+    private Integer timeBeingDead;
 
 }

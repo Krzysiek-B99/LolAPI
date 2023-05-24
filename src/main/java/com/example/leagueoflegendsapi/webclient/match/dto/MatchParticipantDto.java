@@ -12,6 +12,8 @@ public class MatchParticipantDto {
     private String summonerName;
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private int teamId;
+    private Integer baitPings;
+    private Integer totalTimeSpentDead;
 
     public MatchParticipantDto(String summonerName, int teamId) {
         this.summonerName = summonerName;

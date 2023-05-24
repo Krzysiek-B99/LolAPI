@@ -29,7 +29,7 @@ public class SummonerService {
         List<String> matchesIds =  historyClient.getMatchHistoryByPuuid(summonerPuuid);
         List<Match> matchesHistory = new ArrayList<>();
         for(String matchId : matchesIds){
-            matchesHistory.add(matchService.getMatchDetails(matchId));
+            matchesHistory.add(matchService.getMatchDetails(matchId,false));
         }
         return matchesHistory;
     }
