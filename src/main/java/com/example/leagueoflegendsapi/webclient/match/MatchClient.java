@@ -46,7 +46,7 @@ public class MatchClient {
 
         if (includeExtraDetailsFields) {
             builder.baitPings(participant.getBaitPings())
-                    .timeBeingDead(participant.getTotalTimeSpentDead())
+                    .totalTimeBeingDead(participant.getTotalTimeSpentDead())
                     .longestTimeSpentLiving(participant.getLongestTimeSpentLiving())
                     .spell1Casts(participant.getSpell1Casts())
                     .spell2Casts(participant.getSpell2Casts())

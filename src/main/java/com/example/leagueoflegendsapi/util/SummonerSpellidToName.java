@@ -1,8 +1,4 @@
 package com.example.leagueoflegendsapi.util;
-
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
 public class SummonerSpellidToName {
 
     public static String changeSpellIdToName(int id){
